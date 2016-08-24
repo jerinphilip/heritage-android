@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Heritage</string>
+    <string name="home">Home</string>
+    <string name="nearby">Nearby</string>
+    <string name="places">Places</string>
+    <string name="download">Download</string>
+    <string name="my_heritage_sites">My Heritage Sites</string>
+</resources>
