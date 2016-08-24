@@ -22,13 +22,21 @@ import java.net.URL;
  * Created by jerin on 24/8/16.
  */
 public class Downloader extends AsyncTask<String, String, String> {
+    /*
+        The class is used to download a package.
+        Extraction of package happens soon after it is downloaded.
+
+     */
+    public String baseWeb = "http://preon.iiit.ac.in/~heritage/packages/";
+    public String compressedDir = 'heritage/compressed/';
+    public String extractDir = 'heritage/extracted/';
 
     @Override
-    protected String doInBackground(String... f_url){
-        //String address = "http://web.iiit.ac.in/~ashwin.sudhir/index.txt";
-        String address = "http://preon.iiit.ac.in/~heritage/golconda.tar.gz";
-        //String baseWeb = "http://web.iiit.ac.in/~ashwin.sudhir/parent";
+    protected String doInBackground(String... params){
+        String packageName = params[0];
+        String address = baseWeb+packageName;
         File baseLocal = Environment.getExternalStorageDirectory();
+
 
         URL url = null;
         try {
@@ -37,13 +45,21 @@ public class Downloader extends AsyncTask<String, String, String> {
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
             connection.connect();
-            //Input File
-            File archive = new File(baseLocal, "golconda.tar.gz");
+
+            /*
+                File to write out to.
+                Writes the <package>.tar.gz file to heritage/compressed/<package>.tar.gz
+                Assumes heritage/compressed is already created.
+             */
+
+            File archive = new File(baseLocal, compressedDir+packageName);
             FileOutputStream archiveStream = new FileOutputStream(archive);
 
-            //Output File
-
             InputStream input = connection.getInputStream();
+
+            /*
+                Now read from the connection and write to the local file.
+             */
             try {
                 byte[] buffer = new byte[1024];
                 int len = 0;
@@ -55,13 +71,12 @@ public class Downloader extends AsyncTask<String, String, String> {
             catch(IOException e){
                 Log.d("PackageReader:DL", e.toString());
             }
-            /*
-            String s = "What the hell";
-            archiveStream.write(s.getBytes());
-            */
-            //bufferedWrite(input, archiveStream);
             Log.d("PackageReader:DL", "Download Finished");
-            Extract();
+
+            /*
+                Now extract the package.
+             */
+            ExtractPackage(packageName);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -73,12 +88,22 @@ public class Downloader extends AsyncTask<String, String, String> {
         return null;
     }
 
-    void Extract(){
+    void ExtractPackage(String packageName){
+        /*
+            Uses the jarchivelib library. Find documentation at:
+                https://github.com/thrau/jarchivelib
+         */
+
         Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-        // Snippet from https://github.com/thrau/jarchivelib
         File baseLocal = Environment.getExternalStorageDirectory();
-        File archive = new File(baseLocal, "golconda.tar.gz");
-        File destination = new File(baseLocal, "heritage");
+        /*
+            In short.
+                Takes heritage/compressed/<package>.tar.gz
+                Extracts contents to heritage/extracted/
+                <package>.tar.gz is expected to contain a <package> directory.
+         */
+        File archive = new File(baseLocal, compressedDir+packageName);
+        File destination = new File(baseLocal, extractDir);
 
 
         try{
