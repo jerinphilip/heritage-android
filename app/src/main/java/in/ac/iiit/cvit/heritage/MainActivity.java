@@ -2,6 +2,7 @@ package in.ac.iiit.cvit.heritage;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private static final String LOGTAG = "Heritage";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
