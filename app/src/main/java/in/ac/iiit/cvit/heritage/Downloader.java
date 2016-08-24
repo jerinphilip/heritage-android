@@ -28,8 +28,8 @@ public class Downloader extends AsyncTask<String, String, String> {
 
      */
     public String baseWeb = "http://preon.iiit.ac.in/~heritage/packages/";
-    public String compressedDir = 'heritage/compressed/';
-    public String extractDir = 'heritage/extracted/';
+    public String compressedDir = "heritage/compressed/";
+    public String extractDir = "heritage/extracted/";
 
     @Override
     protected String doInBackground(String... params){
