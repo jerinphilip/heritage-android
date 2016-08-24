@@ -18,6 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Created by jerin on 24/8/16.
+ */
 public class Downloader extends AsyncTask<String, String, String> {
 
     @Override
@@ -30,17 +33,35 @@ public class Downloader extends AsyncTask<String, String, String> {
         URL url = null;
         try {
             url = new URL(address);
-            HttpURLConnection connxn = (HttpURLConnection) url.openConnection();
-            connxn.setDoOutput(true);
-            connxn.connect();
-
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
+            connection.connect();
             //Input File
             File archive = new File(baseLocal, "golconda.tar.gz");
             FileOutputStream archiveStream = new FileOutputStream(archive);
 
             //Output File
-            InputStream input = connxn.getInputStream();
-            bufferedWrite(input, archiveStream);
+
+            InputStream input = connection.getInputStream();
+            try {
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while ((len = input.read(buffer)) != -1) {
+                    archiveStream.write(buffer, 0, len);
+                }
+                archiveStream.close();
+            }
+            catch(IOException e){
+                Log.d("PackageReader:DL", e.toString());
+            }
+            /*
+            String s = "What the hell";
+            archiveStream.write(s.getBytes());
+            */
+            //bufferedWrite(input, archiveStream);
+            Log.d("PackageReader:DL", "Download Finished");
+            Extract();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -57,7 +78,8 @@ public class Downloader extends AsyncTask<String, String, String> {
         // Snippet from https://github.com/thrau/jarchivelib
         File baseLocal = Environment.getExternalStorageDirectory();
         File archive = new File(baseLocal, "golconda.tar.gz");
-        File destination = new File(baseLocal, "extracted");
+        File destination = new File(baseLocal, "heritage");
+
 
         try{
             archiver.extract(archive, destination);
@@ -68,17 +90,7 @@ public class Downloader extends AsyncTask<String, String, String> {
     }
 
     void bufferedWrite(InputStream in, FileOutputStream out){
-        try {
-            byte[] buffer = new byte[1024];
-            int len = 0;
-            while ((len - in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
-            }
-            out.close();
-            in.close();
-        }
-        catch(IOException e){
-            Log.d("PackageReader:DL", e.toString());
-        }
+
     }
 }
+
