@@ -17,9 +17,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-/**
- * Created by jerin on 24/8/16.
- */
 public class PackageReader {
     public String filename = null;
     InterestPoint IP;
