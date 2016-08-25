@@ -6,16 +6,23 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import org.rauschig.jarchivelib.ArchiveFormat;
 import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import org.rauschig.jarchivelib.CompressionType;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,6 +33,8 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
     private Context _context;
     private ProgressDialog progressDialog;
     private HttpURLConnection httpURLConnection;
+    public String compressedDir = 'heritage/compressed/';
+    public String extractDir = 'heritage/extracted/';
 
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 10000;
@@ -62,7 +71,7 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
 
             int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                File archive = new File(baseLocal, archive_name);
+                File archive = new File(baseLocal, extractDir+archive_name);
                 FileOutputStream archiveStream = new FileOutputStream(archive);
 
                 //Output File
@@ -109,24 +118,37 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
         }
     }
 
-    void Extract(){
-        Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-        // Snippet from https://github.com/thrau/jarchivelib
+    void Extract(String packageName){
         File baseLocal = Environment.getExternalStorageDirectory();
-        File archive = new File(baseLocal, "golconda.tar.gz");
-        File destination = new File(baseLocal, "heritage");
-
-
-        try{
-            archiver.extract(archive, destination);
+        File archive = new File(baseLocal, compressedDir+packageName+".tar.gz");
+        File destination = new File(baseLocal, extractDir);
+        try {
+            TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(
+                    new GzipCompressorInputStream(
+                            new BufferedInputStream(
+                                    new FileInputStream(archive))));
+            TarArchiveEntry entry = tarArchiveInputStream.getNextTarEntry();
+            while (entry != null) {
+                if (entry.isDirectory()) {
+                    entry = tarArchiveInputStream.getNextTarEntry();
+                    Log.d("Inflating", "Found directory "+entry.getName());
+                    continue;
+                }
+                File curfile = new File(destination, entry.getName());
+                File parent = curfile.getParentFile();
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                OutputStream out = new FileOutputStream(curfile);
+                IOUtils.copy(tarArchiveInputStream, out);
+                out.close();
+                Log.d("Inflating", entry.getName());
+                entry = tarArchiveInputStream.getNextTarEntry();
+            }
+            tarArchiveInputStream.close();
+        }catch(Exception e){
+            Log.d("ExtractError", e.toString());
         }
-        catch(IOException e){
-            Log.d("PackageReader:extract", e.toString());
-        }
-    }
-
-    void bufferedWrite(InputStream in, FileOutputStream out){
-
     }
 }
 
