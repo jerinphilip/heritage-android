@@ -4,10 +4,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
-import org.rauschig.jarchivelib.ArchiveFormat;
-import org.rauschig.jarchivelib.Archiver;
-import org.rauschig.jarchivelib.ArchiverFactory;
-import org.rauschig.jarchivelib.CompressionType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -89,29 +85,7 @@ public class Downloader extends AsyncTask<String, String, String> {
     }
 
     void ExtractPackage(String packageName){
-        /*
-            Uses the jarchivelib library. Find documentation at:
-                https://github.com/thrau/jarchivelib
-         */
 
-        Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
-        File baseLocal = Environment.getExternalStorageDirectory();
-        /*
-            In short.
-                Takes heritage/compressed/<package>.tar.gz
-                Extracts contents to heritage/extracted/
-                <package>.tar.gz is expected to contain a <package> directory.
-         */
-        File archive = new File(baseLocal, compressedDir+packageName);
-        File destination = new File(baseLocal, extractDir);
-
-
-        try{
-            archiver.extract(archive, destination);
-        }
-        catch(IOException e){
-            Log.d("PackageReader:extract", e.toString());
-        }
     }
 
     void bufferedWrite(InputStream in, FileOutputStream out){

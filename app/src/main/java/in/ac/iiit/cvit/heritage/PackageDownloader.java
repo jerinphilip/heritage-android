@@ -10,10 +10,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
-import org.rauschig.jarchivelib.ArchiveFormat;
-import org.rauschig.jarchivelib.Archiver;
-import org.rauschig.jarchivelib.ArchiverFactory;
-import org.rauschig.jarchivelib.CompressionType;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -33,8 +29,8 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
     private Context _context;
     private ProgressDialog progressDialog;
     private HttpURLConnection httpURLConnection;
-    public String compressedDir = 'heritage/compressed/';
-    public String extractDir = 'heritage/extracted/';
+    public String compressedDir = "heritage/compressed/";
+    public String extractDir = "heritage/extracted/";
 
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 10000;
@@ -57,7 +53,8 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... params){
         String archive_name = params[0] + ".tar.gz";
-        String address = "http://preon.iiit.ac.in/~heritage/" + archive_name;
+        String address = "http://preon.iiit.ac.in/~heritage/packages/" + archive_name;
+        initializeDirectory();
         File baseLocal = Environment.getExternalStorageDirectory();
 
         try {
@@ -71,7 +68,7 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
 
             int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                File archive = new File(baseLocal, extractDir+archive_name);
+                File archive = new File(baseLocal, compressedDir+archive_name);
                 FileOutputStream archiveStream = new FileOutputStream(archive);
 
                 //Output File
@@ -89,7 +86,7 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
                 }
 
                 Log.i(LOGTAG, "Download Finished");
-                Extract();
+                ExtractPackage(archive_name);
 
                 return "Package Download Completed";
             } else {
@@ -118,9 +115,21 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
         }
     }
 
-    void Extract(String packageName){
+    void initializeDirectory(){
         File baseLocal = Environment.getExternalStorageDirectory();
-        File archive = new File(baseLocal, compressedDir+packageName+".tar.gz");
+        File extracted = new File(baseLocal, extractDir);
+        if(!extracted.exists()){
+            extracted.mkdirs();
+        }
+        File compressed = new File(baseLocal, compressedDir);
+        if(!compressed.exists()){
+            compressed.mkdirs();
+        }
+    }
+
+    void ExtractPackage(String archiveName){
+        File baseLocal = Environment.getExternalStorageDirectory();
+        File archive = new File(baseLocal, compressedDir+archiveName);
         File destination = new File(baseLocal, extractDir);
         try {
             TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(
