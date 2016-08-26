@@ -34,6 +34,7 @@ public class PackageReader {
     public PackageReader(String packageName){
         _packageName = packageName;
         InterestPoints = new ArrayList<InterestPoint>();
+        readFromFile();
     }
 
     public ArrayList<InterestPoint> getContents(){
@@ -86,7 +87,7 @@ public class PackageReader {
     void readFromFile(){
         File baseLocal = Environment.getExternalStorageDirectory();
 
-        File xmlfile = new File(baseLocal, "heritage/extracted/" + _packageName + "d.xml");
+        File xmlfile = new File(baseLocal, "heritage/extracted/" + _packageName + "/d.xml");
         try {
             FileInputStream xmlStream = new FileInputStream(xmlfile);
             String contents = readTextFile(xmlStream);

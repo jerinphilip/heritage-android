@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class PackagesListActivity extends AppCompatActivity {
 
@@ -39,5 +42,16 @@ public class PackagesListActivity extends AppCompatActivity {
         listview_package_list = (ListView) findViewById(R.id.listview_package_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(PackagesListActivity.this, android.R.layout.simple_list_item_1, packages);
         listview_package_list.setAdapter(adapter);
+        listview_package_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent_main_activity = new Intent(PackagesListActivity.this, MainActivity.class);
+                TextView textView = (TextView)view;
+                String packageName = (String)textView.getText();
+                Log.d("ListView", packageName);
+                intent_main_activity.putExtra("package", packageName);
+                startActivity(intent_main_activity);
+            }
+        });
     }
 }

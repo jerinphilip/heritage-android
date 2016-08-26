@@ -7,6 +7,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,11 +54,32 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        Intent parent = getIntent();
+        String packageName = parent.getStringExtra("package");
+        Log.d("MainActivity", packageName);
+
+        LoadPackage(packageName);
+    }
+
+    public void LoadPackage(String packageName){
+        PackageReader reader;
+        packageName  = packageName.toLowerCase();
+        reader = new PackageReader(packageName);
+        ArrayList<InterestPoint> InterestPoints = reader.getContents();
+        InterestPoint interestPoint;
+        for(int i=0; i<InterestPoints.size(); i++){
+            interestPoint = InterestPoints.get(i);
+            Log.d("LoadPackage", interestPoint.get("title"));
+        }
+
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
 
         Intent intent_main = new Intent(Intent.ACTION_MAIN);
         intent_main.addCategory(Intent.CATEGORY_HOME);
