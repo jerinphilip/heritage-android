@@ -21,7 +21,8 @@ public class PackagesDownloaderActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(PackagesDownloaderActivity.this, android.R.layout.simple_list_item_1, packages);
 
         listview_available_packages = (ListView) findViewById(R.id.listview_available_packages);
-        listview_available_packages.setAdapter(new PackagesDownloaderAdapter(PackagesDownloaderActivity.this, packages));
+        //listview_available_packages.setAdapter(new PackagesDownloaderAdapter(PackagesDownloaderActivity.this, packages));
+
         listview_available_packages.setAdapter(adapter);
         listview_available_packages.setClickable(true);
         listview_available_packages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
