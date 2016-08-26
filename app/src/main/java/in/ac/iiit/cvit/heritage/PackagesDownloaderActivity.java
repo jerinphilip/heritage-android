@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class PackageDownloaderActivity extends AppCompatActivity {
+public class PackagesDownloaderActivity extends AppCompatActivity {
 
     private ListView listview_available_packages;
 
@@ -18,16 +18,17 @@ public class PackageDownloaderActivity extends AppCompatActivity {
 
         //temporary hard coding
         String[] packages = {"golconda"};
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(PackageDownloaderActivity.this, android.R.layout.simple_list_item_1, packages);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(PackagesDownloaderActivity.this, android.R.layout.simple_list_item_1, packages);
 
         listview_available_packages = (ListView) findViewById(R.id.listview_available_packages);
+        listview_available_packages.setAdapter(new PackagesDownloaderAdapter(PackagesDownloaderActivity.this, packages));
         listview_available_packages.setAdapter(adapter);
         listview_available_packages.setClickable(true);
         listview_available_packages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String list_item = adapter.getItem(position).toLowerCase();
-                new PackageDownloader(PackageDownloaderActivity.this).execute(list_item);
+                new PackageDownloader(PackagesDownloaderActivity.this).execute(list_item);
             }
         });
     }

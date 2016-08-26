@@ -29,12 +29,13 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
     private Context _context;
     private ProgressDialog progressDialog;
     private HttpURLConnection httpURLConnection;
-    public String compressedDir = "heritage/compressed/";
-    public String extractDir = "heritage/extracted/";
 
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 10000;
+
     public static final String LOGTAG = "Heritage";
+    public static final String EXTRACT_DIR = "heritage/extracted/";
+    public static final String COMPRESSED_DIR = "heritage/compressed/";
 
     public PackageDownloader(Context context) {
         _context = context;
@@ -68,10 +69,8 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
 
             int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                File archive = new File(baseLocal, compressedDir+archive_name);
+                File archive = new File(baseLocal, COMPRESSED_DIR+archive_name);
                 FileOutputStream archiveStream = new FileOutputStream(archive);
-
-                //Output File
 
                 InputStream input = httpURLConnection.getInputStream();
                 try {
@@ -117,20 +116,21 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
 
     void initializeDirectory(){
         File baseLocal = Environment.getExternalStorageDirectory();
-        File extracted = new File(baseLocal, extractDir);
-        if(!extracted.exists()){
+        File extracted = new File(baseLocal, EXTRACT_DIR);
+        if (!extracted.exists()){
             extracted.mkdirs();
         }
-        File compressed = new File(baseLocal, compressedDir);
-        if(!compressed.exists()){
+        File compressed = new File(baseLocal, COMPRESSED_DIR);
+        if (!compressed.exists()){
             compressed.mkdirs();
         }
     }
 
     void ExtractPackage(String archiveName){
         File baseLocal = Environment.getExternalStorageDirectory();
-        File archive = new File(baseLocal, compressedDir+archiveName);
-        File destination = new File(baseLocal, extractDir);
+        File archive = new File(baseLocal, COMPRESSED_DIR + archiveName);
+        File destination = new File(baseLocal, EXTRACT_DIR);
+
         try {
             TarArchiveInputStream tarArchiveInputStream = new TarArchiveInputStream(
                     new GzipCompressorInputStream(
@@ -140,23 +140,25 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
             while (entry != null) {
                 if (entry.isDirectory()) {
                     entry = tarArchiveInputStream.getNextTarEntry();
-                    Log.d("Inflating", "Found directory "+entry.getName());
+                    Log.i(LOGTAG, "Found directory " + entry.getName());
                     continue;
                 }
-                File curfile = new File(destination, entry.getName());
-                File parent = curfile.getParentFile();
+
+                File currfile = new File(destination, entry.getName());
+                File parent = currfile.getParentFile();
                 if (!parent.exists()) {
                     parent.mkdirs();
                 }
-                OutputStream out = new FileOutputStream(curfile);
+
+                OutputStream out = new FileOutputStream(currfile);
                 IOUtils.copy(tarArchiveInputStream, out);
                 out.close();
-                Log.d("Inflating", entry.getName());
+                Log.i(LOGTAG, entry.getName());
                 entry = tarArchiveInputStream.getNextTarEntry();
             }
             tarArchiveInputStream.close();
-        }catch(Exception e){
-            Log.d("ExtractError", e.toString());
+        } catch(Exception e){
+            Log.i(LOGTAG, e.toString());
         }
     }
 }

@@ -1,5 +1,8 @@
 package in.ac.iiit.cvit.heritage;
 
+import android.os.Environment;
+import android.util.Log;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -8,6 +11,9 @@ import org.xml.sax.SAXException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -18,12 +24,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class PackageReader {
-    public String filename = null;
+
+    public String _packageName;
     InterestPoint IP;
     ArrayList<InterestPoint> InterestPoints;
 
-    PackageReader(String fn){
-        filename = fn;
+    public static final String LOGTAG = "Heritage";
+
+    PackageReader(String packageName){
+        _packageName = packageName;
         InterestPoints = new ArrayList<InterestPoint>();
     }
 
@@ -83,10 +92,19 @@ public class PackageReader {
         }
     }
 
-    void readContents(InputStream fstream){
-        String xml = readTextFile(fstream);
-        readContentsFromString(xml);
+    void readFromFile(){
+        File baseLocal = Environment.getExternalStorageDirectory();
+
+        File xmlfile = new File(baseLocal, "heritage/extracted/" + _packageName + "d.xml");
+        try {
+            FileInputStream xmlStream = new FileInputStream(xmlfile);
+            String contents = readTextFile(xmlStream);
+            readContentsFromString(contents);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public String readTextFile(InputStream inputStream) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

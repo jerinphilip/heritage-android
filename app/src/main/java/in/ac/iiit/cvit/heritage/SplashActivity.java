@@ -21,9 +21,9 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     sleep(SLEEP*1000);
 
-                    Intent intent_package_lists = new Intent(SplashActivity.this, PackageListsActivity.class);
-                    intent_package_lists.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent_package_lists);
+                    Intent intent_packages_list = new Intent(SplashActivity.this, PackagesListActivity.class);
+                    intent_packages_list.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent_packages_list);
 
                     finish();
                 } catch (Exception e) {

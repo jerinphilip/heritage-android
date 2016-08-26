@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="in.ac.iiit.cvit.heritage">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -29,11 +29,11 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".PackageDownloaderActivity"
+        <activity android:name=".PackagesDownloaderActivity"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".PackageListsActivity"
+        <activity android:name=".PackagesListActivity"
             android:screenOrientation="portrait">
         </activity>
 

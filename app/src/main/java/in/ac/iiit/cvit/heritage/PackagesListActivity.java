@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class PackageListsActivity extends AppCompatActivity {
+public class PackagesListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Button button_download_packages;
@@ -29,7 +29,7 @@ public class PackageListsActivity extends AppCompatActivity {
         button_download_packages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_package_downloader = new Intent(PackageListsActivity.this, PackageDownloaderActivity.class);
+                Intent intent_package_downloader = new Intent(PackagesListActivity.this, PackagesDownloaderActivity.class);
                 startActivity(intent_package_downloader);
             }
         });
@@ -37,7 +37,7 @@ public class PackageListsActivity extends AppCompatActivity {
         //temporary hard coding
         String[] packages = {"Golconda"};
         listview_package_list = (ListView) findViewById(R.id.listview_package_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(PackageListsActivity.this, android.R.layout.simple_list_item_1, packages);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(PackagesListActivity.this, android.R.layout.simple_list_item_1, packages);
         listview_package_list.setAdapter(adapter);
     }
 }
