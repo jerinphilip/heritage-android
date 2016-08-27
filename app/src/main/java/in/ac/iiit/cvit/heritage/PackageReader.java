@@ -41,7 +41,7 @@ public class PackageReader {
         return InterestPoints;
     }
 
-    void readContentsFromString(String xml){
+    private void readContentsFromString(String xml){
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
         try {
@@ -84,7 +84,7 @@ public class PackageReader {
         }
     }
 
-    void readFromFile(){
+    private void readFromFile(){
         File baseLocal = Environment.getExternalStorageDirectory();
 
         File xmlfile = new File(baseLocal, "heritage/extracted/" + _packageName + "/d.xml");
@@ -98,7 +98,7 @@ public class PackageReader {
     }
 
 
-    public String readTextFile(InputStream inputStream) {
+    private String readTextFile(InputStream inputStream) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         byte buf[] = new byte[1024];

@@ -3,14 +3,15 @@ package in.ac.iiit.cvit.heritage;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    private int tabCount;
+    private int _tabCount;
 
     public PagerAdapter(FragmentManager fragmentManager, int tabCount) {
         super(fragmentManager);
-        this.tabCount = tabCount;
+        _tabCount = tabCount;
     }
 
     @Override
@@ -30,8 +31,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+
     @Override
     public int getCount() {
-        return tabCount;
+        return _tabCount;
     }
 }

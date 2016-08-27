@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 public class HomeFragment extends Fragment {
 
+    private static final String LOGTAG = "Heritage";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);

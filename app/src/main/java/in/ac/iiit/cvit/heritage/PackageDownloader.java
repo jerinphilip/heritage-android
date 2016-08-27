@@ -84,7 +84,7 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
                     Log.i(LOGTAG, e.toString());
                 }
 
-                Log.i(LOGTAG, "Download Finished");
+                //Log.i(LOGTAG, "Download Finished");
                 ExtractPackage(archive_name);
 
                 return "Package Download Completed";
@@ -108,7 +108,7 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         progressDialog.dismiss();
-        Log.i(LOGTAG, result);
+        //Log.i(LOGTAG, result);
 
         if (result.equals("Package Download Complete")) {
         }
@@ -153,12 +153,12 @@ public class PackageDownloader extends AsyncTask<String, String, String> {
                 OutputStream out = new FileOutputStream(currfile);
                 IOUtils.copy(tarArchiveInputStream, out);
                 out.close();
-                Log.i(LOGTAG, entry.getName());
+                //Log.i(LOGTAG, entry.getName());
                 entry = tarArchiveInputStream.getNextTarEntry();
             }
             tarArchiveInputStream.close();
         } catch(Exception e){
-            Log.i(LOGTAG, e.toString());
+            //Log.i(LOGTAG, e.toString());
         }
     }
 }

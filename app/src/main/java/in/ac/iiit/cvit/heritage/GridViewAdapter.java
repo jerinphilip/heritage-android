@@ -1,10 +1,12 @@
 package in.ac.iiit.cvit.heritage;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,19 +14,45 @@ import java.util.ArrayList;
 
 public class GridViewAdapter extends ArrayAdapter<InterestPoint> {
 
-    public GridViewAdapter(Context context, ArrayList<InterestPoint> interestPoints) {
-        super(context, R.layout.item_interest_point, interestPoints);
+    private ArrayList<InterestPoint> _interestPoints;
+
+    private static final String LOGTAG = "Heritage";
+
+    public GridViewAdapter(Context context, int viewResourceId, ArrayList<InterestPoint> interestPoints) {
+        super(context, viewResourceId, interestPoints);
+        _interestPoints = interestPoints;
+    }
+
+    @Override
+    public int getCount() {
+        return _interestPoints.size();
+    }
+
+    @Override
+    public InterestPoint getItem(int position) {
+        return _interestPoints.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view_item_interest_point = inflater.inflate(R.layout.item_interest_point, parent, false);
+        View view = convertView;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.item_interest_point, null);
+        }
 
         InterestPoint interestPoint = getItem(position);
-        ImageView imageview_interest_point = (ImageView) view_item_interest_point.findViewById(R.id.imageview_interest_point_image);
-        TextView textview_interest_point = (TextView) view_item_interest_point.findViewById(R.id.textview_interest_point_name);
+        //ImageView imageview_interest_point = (ImageView) view.findViewById(R.id.imageview_interest_point_image);
+        TextView textview_interest_point = (TextView) view.findViewById(R.id.textview_interest_point_name);
 
-        return view_item_interest_point;
+        textview_interest_point.setText(interestPoint.get("title"));
+        Log.i(LOGTAG, interestPoint.get("title"));
+
+        return view;
     }
 }
