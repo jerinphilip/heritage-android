@@ -18,4 +18,19 @@ public class InterestPoint {
     String get(String key) {
         return details.get(key);
     }
+
+    double distance(double iLat, double iLong){
+        double pLat, pLong;
+        double dLat, dLong;
+        double sum;
+
+        pLat = Double.parseDouble(details.get("lat"));
+        pLong = Double.parseDouble(details.get("long"));
+
+        /* Eucleadean distance. Should work. */
+        dLat = pLat - iLat;
+        dLong = pLong - iLong;
+        sum = dLat * dLat + dLong * dLong;
+        return Math.sqrt(sum);
+    }
 }
