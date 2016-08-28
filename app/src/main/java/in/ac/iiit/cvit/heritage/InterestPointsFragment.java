@@ -3,15 +3,22 @@ package in.ac.iiit.cvit.heritage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.util.ArrayList;
 
 public class InterestPointsFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private static final String LOGTAG = "Heritage";
 
@@ -24,8 +31,25 @@ public class InterestPointsFragment extends Fragment {
 
         ArrayList<InterestPoint> interestPoints = LoadPackage(packageName);
 
-        GridView gridview_interest_points = (GridView) root.findViewById(R.id.gridview_interest_points);
-        gridview_interest_points.setAdapter(new GridViewAdapter(getActivity(), R.layout.fragment_interest_points, interestPoints));
+/*
+        final GridView gridview_interest_points = (GridView) root.findViewById(R.id.gridview_interest_points);
+        final GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), R.layout.fragment_interest_points, interestPoints);
+        gridview_interest_points.setAdapter(gridViewAdapter);
+        gridview_interest_points.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InterestPoint interestPoint = gridViewAdapter.getItem(position);
+                interestPoint.get("title");
+            }
+        });
+*/
+
+        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_interest_points);
+        recyclerView.setHasFixedSize(true);
+        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        recyclerViewAdapter = new RecyclerViewAdapter(interestPoints);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         return root;
     }
