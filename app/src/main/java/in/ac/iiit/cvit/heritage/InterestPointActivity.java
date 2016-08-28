@@ -1,5 +1,6 @@
 package in.ac.iiit.cvit.heritage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
@@ -16,12 +17,15 @@ public class InterestPointActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interest_point);
 
+        Intent intent = getIntent();
+        String text_interest_point = intent.getStringExtra("interest_point");
+
         toolbar = (Toolbar) findViewById(R.id.coordinatorlayout_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.coordinatorlayout_colltoolbar);
-        collapsingToolbarLayout.setTitle("Interest Point");
+        collapsingToolbarLayout.setTitle(text_interest_point);
         collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(InterestPointActivity.this, R.color.colorPrimaryDark));
     }
 }

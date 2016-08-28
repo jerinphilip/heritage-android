@@ -12,28 +12,17 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataObjectHolder> {
 
     private ArrayList<InterestPoint> interestPoints;
-    private static CardOnClickListener cardOnClickListener;
 
-    public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class DataObjectHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
-        TextView textView;
+        private ImageView imageView;
+        private TextView textView;
 
         public DataObjectHolder(View view) {
             super(view);
-            imageView = (ImageView) view.findViewById(R.id.cardview_image);
-            textView = (TextView) view.findViewById(R.id.cardview_text);
-            view.setOnClickListener(this);
+            this.imageView = (ImageView) view.findViewById(R.id.cardview_image);
+            this.textView = (TextView) view.findViewById(R.id.cardview_text);
         }
-
-        @Override
-        public void onClick(View v) {
-            cardOnClickListener.onItemClick(getAdapterPosition(), v);
-        }
-    }
-
-    public void setOnItemClickListener(CardOnClickListener cardOnClickListener) {
-        this.cardOnClickListener = cardOnClickListener;
     }
 
     public RecyclerViewAdapter(ArrayList<InterestPoint> interestPoints) {
@@ -49,25 +38,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.textView.setText(interestPoints.get(position).get("title"));
-    }
+        ImageView imageView = holder.imageView;
+        TextView textView = holder.textView;
 
-    public void addItem(InterestPoint interestPoint, int index) {
-        interestPoints.add(index, interestPoint);
-        notifyItemInserted(index);
-    }
-
-    public void deleteItem(int index) {
-        interestPoints.remove(index);
-        notifyItemRemoved(index);
+        textView.setText(interestPoints.get(position).get("title"));
     }
 
     @Override
     public int getItemCount() {
         return interestPoints.size();
-    }
-
-    public interface CardOnClickListener {
-        void onItemClick(int position, View v);
     }
 }

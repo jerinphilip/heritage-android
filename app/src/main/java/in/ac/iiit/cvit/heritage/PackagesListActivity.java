@@ -48,7 +48,6 @@ public class PackagesListActivity extends AppCompatActivity {
                 Intent intent_main_activity = new Intent(PackagesListActivity.this, MainActivity.class);
                 TextView textView = (TextView)view;
                 String packageName = (String)textView.getText();
-                Log.d("ListView", packageName);
                 intent_main_activity.putExtra("package", packageName);
                 startActivity(intent_main_activity);
             }
