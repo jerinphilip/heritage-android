@@ -132,7 +132,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
             /*
             setContentView(R.layout.activity_main);
             TextView textView = (TextView) findViewById(R.id.coordinates);
-            textView.setText("lattitude: " + currentLatitude + " longitude: " + currentLongitude);
+            textView.setText("latitude: " + currentLatitude + " longitude: " + currentLongitude);
             */
             Log.d(LOGTAG, "Creating toast, onConnected");
             Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
@@ -202,7 +202,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         TextView textView = (TextView) findViewById(R.id.coordinates);
         textView.setText(currentLatitude + " WORKS " + currentLongitude);
         */
-        Log.d(LOGTAG, "OnLocationChanged:"+"("+currentLatitude+","+currentLongitude+")");
+        //Log.d(LOGTAG, "OnLocationChanged:"+"("+currentLatitude+","+currentLongitude+")");
         Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
     }
 

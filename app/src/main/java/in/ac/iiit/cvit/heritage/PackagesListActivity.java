@@ -17,11 +17,14 @@ public class PackagesListActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Button button_download_packages;
     private ListView listview_package_list;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package_lists);
+
+        sessionManager = new SessionManager();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.my_heritage_sites);
@@ -38,16 +41,18 @@ public class PackagesListActivity extends AppCompatActivity {
         });
 
         //temporary hard coding
-        String[] packages = {"Golconda"};
+        String[] packages = {"Golconda", "Hampi"};
         listview_package_list = (ListView) findViewById(R.id.listview_package_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(PackagesListActivity.this, android.R.layout.simple_list_item_1, packages);
         listview_package_list.setAdapter(adapter);
         listview_package_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView textView = (TextView) view;
+                String packageName = (String) textView.getText();
+                sessionManager.setSessionPreferences(PackagesListActivity.this, "package_name", packageName);
+
                 Intent intent_main_activity = new Intent(PackagesListActivity.this, MainActivity.class);
-                TextView textView = (TextView)view;
-                String packageName = (String)textView.getText();
                 intent_main_activity.putExtra("package", packageName);
                 startActivity(intent_main_activity);
             }

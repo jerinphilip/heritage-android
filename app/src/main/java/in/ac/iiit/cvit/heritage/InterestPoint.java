@@ -1,5 +1,11 @@
 package in.ac.iiit.cvit.heritage;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.util.Log;
+
+import java.io.File;
 import java.util.HashMap;
 
 public class InterestPoint {
@@ -7,16 +13,31 @@ public class InterestPoint {
     private int _id;
     private HashMap<String, String> details;
 
+    private static final String LOGTAG = "Heritage";
+
     public InterestPoint() {
         details = new HashMap<String, String>();
     }
 
-    void set(String key, String value) {
+    public void set(String key, String value) {
         details.put(key, value);
     }
 
-    String get(String key) {
+    public String get(String key) {
         return details.get(key);
+    }
+
+    public Bitmap getImage() {
+        String image_path = Environment.getExternalStorageDirectory() + "/heritage/extracted/golconda/" + details.get("image") + ".JPG";
+        File imageFile = new File(image_path);
+        if (imageFile.exists()) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+
+            return bitmap;
+        }
+        return null;
     }
 
     double distance(double iLat, double iLong){

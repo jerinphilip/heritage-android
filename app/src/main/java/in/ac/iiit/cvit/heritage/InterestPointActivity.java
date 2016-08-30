@@ -22,7 +22,6 @@ public class InterestPointActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String text_interest_point = intent.getStringExtra("interest_point");
-        Log.i(LOGTAG, text_interest_point);
 
         toolbar = (Toolbar) findViewById(R.id.coordinatorlayout_toolbar);
         toolbar.setTitle(text_interest_point);

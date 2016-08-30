@@ -1,6 +1,9 @@
 package in.ac.iiit.cvit.heritage;
 
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataObjectHolder> {
 
     private ArrayList<InterestPoint> interestPoints;
+    private static final String LOGTAG = "Heritage";
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder {
 
@@ -42,6 +46,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textView = holder.textView;
 
         textView.setText(interestPoints.get(position).get("title"));
+        imageView.setImageBitmap(interestPoints.get(position).getImage());
     }
 
     @Override

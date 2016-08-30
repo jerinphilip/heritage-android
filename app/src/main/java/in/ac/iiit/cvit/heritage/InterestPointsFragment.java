@@ -19,6 +19,7 @@ public class InterestPointsFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
+    private ArrayList<InterestPoint> interestPoints;
 
     private static final String LOGTAG = "Heritage";
 
@@ -26,10 +27,7 @@ public class InterestPointsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_interest_points, container, false);
 
-        String packageName = getActivity().getIntent().getStringExtra("package");
-        Log.i(LOGTAG, packageName);
-
-        ArrayList<InterestPoint> interestPoints = LoadPackage(packageName);
+        interestPoints = ((MainActivity) this.getActivity()).interestPoints;
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_interest_points);
         recyclerView.setHasFixedSize(true);
@@ -55,13 +53,5 @@ public class InterestPointsFragment extends Fragment {
         );
 
         return root;
-    }
-
-    private ArrayList<InterestPoint> LoadPackage(String packageName){
-        PackageReader reader;
-        packageName = packageName.toLowerCase();
-        reader = new PackageReader(packageName);
-        ArrayList<InterestPoint> interestPoints = reader.getContents();
-        return interestPoints;
     }
 }
