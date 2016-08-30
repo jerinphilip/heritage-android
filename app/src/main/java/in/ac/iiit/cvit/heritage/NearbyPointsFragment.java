@@ -44,7 +44,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
     private double currentLongitude;
 
     private ArrayList<InterestPoint> sortedInterestPoints;
-    private ArrayList<InterestPoint> InterestPoints;
+    private ArrayList<InterestPoint> interestPoints;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
@@ -60,36 +60,37 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         _context = getActivity();
         mGoogleApiClient = null;
         createLocationClients();
-        String packageName = getActivity().getIntent().getStringExtra("package");
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_interest_points);
+        interestPoints = ((MainActivity) this.getActivity()).interestPoints2;
+        sortedInterestPoints = interestPoints;
+
+        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_nearby_points);
         recyclerView.setHasFixedSize(true);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        refresh();
-
+        refreshRecyclerView();
 
         return root;
     }
 
-    public void refresh(){
+    private void refreshRecyclerView() {
         recyclerViewAdapter = new RecyclerViewAdapter(sortedInterestPoints);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerViewOnItemClickListener(getActivity(), new RecyclerViewOnItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(position);
-                        TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.cardview_text);
-                        String text = textView.getText().toString();
+            new RecyclerViewOnItemClickListener(getActivity(), new RecyclerViewOnItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(position);
+                    TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.cardview_text);
+                    String text = textView.getText().toString();
 
-                        Intent intent_interest_point = new Intent(getActivity(), InterestPointActivity.class);
-                        intent_interest_point.putExtra("interest_point", text);
-                        startActivity(intent_interest_point);
-                    }
-                })
+                    Intent intent_interest_point = new Intent(getActivity(), InterestPointActivity.class);
+                    intent_interest_point.putExtra("interest_point", text);
+                    startActivity(intent_interest_point);
+                }
+            })
         );
     }
 
@@ -127,7 +128,6 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
 
     @Override
     public void onConnectionSuspended(int i) {}
-
 
     private void createLocationClients(){
         if (mGoogleApiClient == null) {
@@ -238,8 +238,9 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
     public void onLocationChanged(Location location) {
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
+        //Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
 
-        ArrayList<InterestPoint> interestPoints = ((MainActivity) this.getActivity()).interestPoints;
+/*
         ArrayList<Pair<Double, Integer>> Indices = new ArrayList<>();
         double distance;
         Pair<Double, Integer> P;
@@ -251,7 +252,6 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         Collections.sort(Indices, new Comparator<Pair<Double, Integer>>() {
             @Override
             public int compare(final Pair<Double, Integer> left, final Pair<Double, Integer> right) {
-                // TODO: implement your logic here
                 if (left.first < right.first){
                     return 1;
                 }
@@ -263,8 +263,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
                 }
             }
         });
-        //Log.d(LOGTAG, "OnLocationChanged:"+"("+currentLatitude+","+currentLongitude+")");
-        Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+
         sortedInterestPoints.clear();
         InterestPoint interestPoint;
         for (int i=0; i<Math.min(TRUNCATION_LIMIT, sortedInterestPoints.size()); i++) {
@@ -272,7 +271,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
             sortedInterestPoints.add(interestPoint);
         }
 
-        refresh();
+        refreshRecyclerView();
+*/
     }
-
 }

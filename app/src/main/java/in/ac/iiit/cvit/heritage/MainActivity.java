@@ -17,7 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private SessionManager sessionManager;
 
-    public static ArrayList<InterestPoint> interestPoints;
+    public static ArrayList<InterestPoint> interestPoints1;
+    public static ArrayList<InterestPoint> interestPoints2;
 
     private static final String LOGTAG = "Heritage";
 
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager();
         String packageName = sessionManager.getStringSessionPreferences(MainActivity.this, "package_name", "");
-        interestPoints = LoadPackage(packageName);
+        interestPoints1 = LoadPackage(packageName);
+        interestPoints2 = LoadPackage(packageName);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitle(R.string.app_name);

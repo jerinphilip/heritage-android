@@ -27,7 +27,7 @@ public class InterestPointsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_interest_points, container, false);
 
-        interestPoints = ((MainActivity) this.getActivity()).interestPoints;
+        interestPoints = ((MainActivity) this.getActivity()).interestPoints2;
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_interest_points);
         recyclerView.setHasFixedSize(true);

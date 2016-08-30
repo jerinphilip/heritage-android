@@ -1,7 +1,5 @@
 package in.ac.iiit.cvit.heritage;
 
-import android.graphics.Bitmap;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public RecyclerViewAdapter(ArrayList<InterestPoint> interestPoints) {
         this.interestPoints = interestPoints;
+        notifyDataSetChanged();
     }
 
     @Override
