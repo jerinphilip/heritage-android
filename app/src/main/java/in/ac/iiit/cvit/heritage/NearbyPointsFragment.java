@@ -1,12 +1,17 @@
 package in.ac.iiit.cvit.heritage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +27,10 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class NearbyPointsFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener{
@@ -35,9 +43,16 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
     private double currentLatitude;
     private double currentLongitude;
 
+    private ArrayList<InterestPoint> sortedInterestPoints;
     private ArrayList<InterestPoint> InterestPoints;
 
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+
     private Context _context;
+
+    private static final int TRUNCATION_LIMIT = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,8 +61,36 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         mGoogleApiClient = null;
         createLocationClients();
         String packageName = getActivity().getIntent().getStringExtra("package");
-        InterestPoints = LoadPackage(packageName);
+
+        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_interest_points);
+        recyclerView.setHasFixedSize(true);
+        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        refresh();
+
+
         return root;
+    }
+
+    public void refresh(){
+        recyclerViewAdapter = new RecyclerViewAdapter(sortedInterestPoints);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerViewOnItemClickListener(getActivity(), new RecyclerViewOnItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(position);
+                        TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.cardview_text);
+                        String text = textView.getText().toString();
+
+                        Intent intent_interest_point = new Intent(getActivity(), InterestPointActivity.class);
+                        intent_interest_point.putExtra("interest_point", text);
+                        startActivity(intent_interest_point);
+                    }
+                })
+        );
     }
 
     @Override
@@ -196,21 +239,40 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
 
-        // Display lat long on screen
-        /*
-        setContentView(R.layout.activity_main);
-        TextView textView = (TextView) findViewById(R.id.coordinates);
-        textView.setText(currentLatitude + " WORKS " + currentLongitude);
-        */
+        ArrayList<InterestPoint> interestPoints = ((MainActivity) this.getActivity()).interestPoints;
+        ArrayList<Pair<Double, Integer>> Indices = new ArrayList<>();
+        double distance;
+        Pair<Double, Integer> P;
+        for(int i=0; i<interestPoints.size(); i++){
+            distance = interestPoints.get(i).distance(currentLatitude, currentLongitude);
+            P = new Pair(distance, interestPoints.get(i));
+            Indices.add(P);
+        }
+        Collections.sort(Indices, new Comparator<Pair<Double, Integer>>() {
+            @Override
+            public int compare(final Pair<Double, Integer> left, final Pair<Double, Integer> right) {
+                // TODO: implement your logic here
+                if (left.first < right.first){
+                    return 1;
+                }
+                else if (left.first == right.first){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+        });
         //Log.d(LOGTAG, "OnLocationChanged:"+"("+currentLatitude+","+currentLongitude+")");
         Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+        sortedInterestPoints.clear();
+        InterestPoint interestPoint;
+        for (int i=0; i<Math.min(TRUNCATION_LIMIT, sortedInterestPoints.size()); i++) {
+            interestPoint = interestPoints.get(Indices.get(i).second);
+            sortedInterestPoints.add(interestPoint);
+        }
+
+        refresh();
     }
 
-    private ArrayList<InterestPoint> LoadPackage(String packageName){
-        PackageReader reader;
-        packageName = packageName.toLowerCase();
-        reader = new PackageReader(packageName);
-        ArrayList<InterestPoint> interestPoints = reader.getContents();
-        return interestPoints;
-    }
 }

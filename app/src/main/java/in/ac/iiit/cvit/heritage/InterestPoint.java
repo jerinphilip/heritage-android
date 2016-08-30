@@ -54,4 +54,5 @@ public class InterestPoint {
         sum = dLat * dLat + dLong * dLong;
         return Math.sqrt(sum);
     }
+
 }
