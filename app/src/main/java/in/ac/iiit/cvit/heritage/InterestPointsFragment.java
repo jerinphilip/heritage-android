@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +26,13 @@ public class InterestPointsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_interest_points, container, false);
 
-        interestPoints = ((MainActivity) this.getActivity()).interestPoints2;
+        interestPoints = ((MainActivity) this.getActivity()).interestPoints;
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_interest_points);
         recyclerView.setHasFixedSize(true);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(interestPoints);
+        recyclerViewAdapter = new InterestPointsRecyclerViewAdapter(interestPoints);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 

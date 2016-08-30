@@ -61,7 +61,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         mGoogleApiClient = null;
         createLocationClients();
 
-        interestPoints = ((MainActivity) this.getActivity()).interestPoints2;
+        interestPoints = ((MainActivity) this.getActivity()).interestPoints;
         sortedInterestPoints = new ArrayList<InterestPoint>();
         for(int i=0; i<Math.min(TRUNCATION_LIMIT, interestPoints.size()); i++){
             sortedInterestPoints.add(interestPoints.get(i));
@@ -146,12 +146,12 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-        Log.d(LOGTAG, "Clients Created");
+        //Log.d(LOGTAG, "Clients Created");
     }
 
     @Override
     public void onConnected(Bundle bundle){
-        Log.d(LOGTAG, "Running onConnected");
+        //Log.d(LOGTAG, "Running onConnected");
         if (ActivityCompat.checkSelfPermission(_context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(_context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -161,7 +161,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            Log.d(LOGTAG, "Permission Denied");
+            //Log.d(LOGTAG, "Permission Denied");
             return;
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -180,7 +180,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
             TextView textView = (TextView) findViewById(R.id.coordinates);
             textView.setText("latitude: " + currentLatitude + " longitude: " + currentLongitude);
             */
-            Log.d(LOGTAG, "Creating toast, onConnected");
+            //Log.d(LOGTAG, "Creating toast, onConnected");
             //Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
 
@@ -191,7 +191,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
     }
 
     protected void startLocationUpdates() {
-        Log.d(LOGTAG, "Calling startLocationUpdates");
+        //Log.d(LOGTAG, "Calling startLocationUpdates");
         if (ActivityCompat.checkSelfPermission(_context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(_context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -233,7 +233,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
                  * If no resolution is available, display a dialog to the
                  * user with the error.
                  */
-            Log.e("Error", "Location services connection failed with code " + connectionResult.getErrorCode());
+            //Log.e("Error", "Location services connection failed with code " + connectionResult.getErrorCode());
         }
     }
 
@@ -247,9 +247,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
 
     }
 
-    public void computeNearby(Double currentLatitude, Double currentLongitude){
-        //Toast.makeText(_context, "Computing Nearby", Toast.LENGTH_LONG).show();
-
+    public void computeNearby(Double currentLatitude, Double currentLongitude) {
         ArrayList<Pair<Double, Integer>> Indices = new ArrayList<>();
         double distance;
         Pair<Double, Integer> P;
@@ -274,11 +272,9 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         });
 
         InterestPoint interestPoint;
-        Log.d(LOGTAG, TRUNCATION_LIMIT+" "+sortedInterestPoints.size());
         for (int i=0; i<Math.min(TRUNCATION_LIMIT, interestPoints.size()); i++) {
             interestPoint = interestPoints.get(Indices.get(i).second);
             sortedInterestPoints.set(i, interestPoint);
         }
-        Log.d(LOGTAG, TRUNCATION_LIMIT+" "+sortedInterestPoints.size());
     }
 }

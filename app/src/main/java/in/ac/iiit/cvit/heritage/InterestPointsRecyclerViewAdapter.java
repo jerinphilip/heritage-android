@@ -1,7 +1,6 @@
 package in.ac.iiit.cvit.heritage;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.DataObjectHolder> {
+public class InterestPointsRecyclerViewAdapter extends RecyclerView.Adapter<InterestPointsRecyclerViewAdapter.DataObjectHolder> {
 
     private ArrayList<InterestPoint> interestPoints;
     private static final String LOGTAG = "Heritage";
@@ -27,7 +26,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public RecyclerViewAdapter(ArrayList<InterestPoint> interestPoints) {
+    public InterestPointsRecyclerViewAdapter(ArrayList<InterestPoint> interestPoints) {
         this.interestPoints = interestPoints;
         notifyDataSetChanged();
     }
