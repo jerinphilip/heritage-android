@@ -62,7 +62,10 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         createLocationClients();
 
         interestPoints = ((MainActivity) this.getActivity()).interestPoints2;
-        sortedInterestPoints = interestPoints;
+        sortedInterestPoints = new ArrayList<InterestPoint>();
+        for(int i=0; i<Math.min(TRUNCATION_LIMIT, interestPoints.size()); i++){
+            sortedInterestPoints.add(interestPoints.get(i));
+        }
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_nearby_points);
         recyclerView.setHasFixedSize(true);
@@ -74,7 +77,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
     }
 
     private void refreshRecyclerView() {
-        recyclerViewAdapter = new RecyclerViewAdapter(sortedInterestPoints);
+        recyclerViewAdapter = new NearbyPointsRecyclerViewAdapter(sortedInterestPoints);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -178,7 +181,7 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
             textView.setText("latitude: " + currentLatitude + " longitude: " + currentLongitude);
             */
             Log.d(LOGTAG, "Creating toast, onConnected");
-            Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+            //Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
 
         boolean mRequestingLocationUpdates = true;
@@ -239,14 +242,20 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
         //Toast.makeText(_context, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+        computeNearby(currentLatitude, currentLongitude);
+        refreshRecyclerView();
 
-/*
+    }
+
+    public void computeNearby(Double currentLatitude, Double currentLongitude){
+        //Toast.makeText(_context, "Computing Nearby", Toast.LENGTH_LONG).show();
+
         ArrayList<Pair<Double, Integer>> Indices = new ArrayList<>();
         double distance;
         Pair<Double, Integer> P;
         for(int i=0; i<interestPoints.size(); i++){
             distance = interestPoints.get(i).distance(currentLatitude, currentLongitude);
-            P = new Pair(distance, interestPoints.get(i));
+            P = new Pair(distance, i);
             Indices.add(P);
         }
         Collections.sort(Indices, new Comparator<Pair<Double, Integer>>() {
@@ -264,14 +273,12 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
             }
         });
 
-        sortedInterestPoints.clear();
         InterestPoint interestPoint;
-        for (int i=0; i<Math.min(TRUNCATION_LIMIT, sortedInterestPoints.size()); i++) {
+        Log.d(LOGTAG, TRUNCATION_LIMIT+" "+sortedInterestPoints.size());
+        for (int i=0; i<Math.min(TRUNCATION_LIMIT, interestPoints.size()); i++) {
             interestPoint = interestPoints.get(Indices.get(i).second);
-            sortedInterestPoints.add(interestPoint);
+            sortedInterestPoints.set(i, interestPoint);
         }
-
-        refreshRecyclerView();
-*/
+        Log.d(LOGTAG, TRUNCATION_LIMIT+" "+sortedInterestPoints.size());
     }
 }
