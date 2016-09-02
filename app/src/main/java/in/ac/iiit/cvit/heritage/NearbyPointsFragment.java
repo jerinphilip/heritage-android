@@ -253,23 +253,32 @@ public class NearbyPointsFragment extends Fragment implements ConnectionCallback
         Pair<Double, Integer> P;
         for(int i=0; i<interestPoints.size(); i++){
             distance = interestPoints.get(i).distance(currentLatitude, currentLongitude);
+            Log.d(LOGTAG, "Distance = "+distance);
             P = new Pair(distance, i);
             Indices.add(P);
         }
+
         Collections.sort(Indices, new Comparator<Pair<Double, Integer>>() {
             @Override
             public int compare(final Pair<Double, Integer> left, final Pair<Double, Integer> right) {
                 if (left.first < right.first){
-                    return 1;
+                    return -1;
                 }
                 else if (left.first == right.first){
                     return 0;
                 }
                 else{
-                    return -1;
+                    return 1;
                 }
             }
         });
+
+        for(int i=0; i<interestPoints.size(); i++){
+            distance = Indices.get(i).first;
+            Log.d(LOGTAG, "SDistance = "+distance);
+            P = new Pair(distance, i);
+            Indices.add(P);
+        }
 
         InterestPoint interestPoint;
         for (int i=0; i<Math.min(TRUNCATION_LIMIT, interestPoints.size()); i++) {
