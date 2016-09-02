@@ -1,12 +1,14 @@
 package in.ac.iiit.cvit.heritage;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ public class InterestPointActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView imageView;
     private TextView textview_info;
+    private ImageView imageview_images;
     private InterestPoint interestPoint;
     private SessionManager sessionManager;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -32,9 +35,8 @@ public class InterestPointActivity extends AppCompatActivity {
         final String packageName = sessionManager.getStringSessionPreferences(InterestPointActivity.this, "package_name", "");
 
         Intent intent = getIntent();
-        String text_interest_point = intent.getStringExtra("interest_point");
+        final String text_interest_point = intent.getStringExtra("interest_point");
         interestPoint = LoadInterestPoint(packageName, text_interest_point);
-
 
         toolbar = (Toolbar) findViewById(R.id.coordinatorlayout_toolbar);
         setSupportActionBar(toolbar);
@@ -53,6 +55,17 @@ public class InterestPointActivity extends AppCompatActivity {
 
         textview_info = (TextView) findViewById(R.id.cardview_text);
         textview_info.setText(interestPoint.get("info"));
+
+        imageview_images = (ImageView) findViewById(R.id.cardview_image);
+        imageview_images.setImageBitmap(interestPoint.getImages().get(0));
+        imageview_images.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_image_slider = new Intent(InterestPointActivity.this, ImagePagerFragmentActivity.class);
+                intent_image_slider.putExtra("interest_point", text_interest_point);
+                startActivity(intent_image_slider);
+            }
+        });
     }
 
     @Override

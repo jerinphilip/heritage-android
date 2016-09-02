@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InterestPoint {
@@ -38,6 +39,24 @@ public class InterestPoint {
             return bitmap;
         }
         return null;
+    }
+
+    public ArrayList<Bitmap> getImages() {
+        String[] image_names = {"a1", "a2", "a3", "a4", "a5"};
+        ArrayList<Bitmap> image_bitmaps = new ArrayList<Bitmap>();
+
+        for (int i=0; i<image_names.length; i++) {
+            String image_path = Environment.getExternalStorageDirectory() + "/heritage/extracted/golconda/" + image_names[i] + ".JPG";
+            File imageFile = new File(image_path);
+            if (imageFile.exists()) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+                image_bitmaps.add(bitmap);
+            }
+        }
+
+        return image_bitmaps;
     }
 
     double distance(double iLat, double iLong){
