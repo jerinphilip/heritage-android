@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SplashIntroActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
         </activity>

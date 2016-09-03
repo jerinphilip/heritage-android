@@ -11,6 +11,8 @@ import android.util.Log;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private LaunchPreferenceManager launchPreferenceManager;
+
     private static final int SLEEP = 5;
     private static final String LOGTAG = "Heritage";
 
@@ -24,7 +26,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        checkPermissions();
+        //checkPermissions();
+        launchPreferenceManager = new LaunchPreferenceManager(SplashActivity.this);
 
         Thread background = new Thread() {
             @Override
@@ -32,11 +35,19 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     sleep(SLEEP*1000);
 
-                    Intent intent_packages_list = new Intent(SplashActivity.this, PackagesListActivity.class);
-                    intent_packages_list.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent_packages_list);
+                    if (!launchPreferenceManager.isFirstTimeLaunch()) {
+                        launchPreferenceManager.setFirstTimeLaunch(false);
 
-                    finish();
+                        Intent intent_packages_list = new Intent(SplashActivity.this, PackagesListActivity.class);
+                        intent_packages_list.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent_packages_list);
+                        finish();
+                    } else {
+                        Intent intent_splash_intro = new Intent(SplashActivity.this, SplashIntroActivity.class);
+                        intent_splash_intro.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent_splash_intro);
+                        finish();
+                    }
                 } catch (Exception e) {
                     Log.e(LOGTAG, e.toString());
                 }
