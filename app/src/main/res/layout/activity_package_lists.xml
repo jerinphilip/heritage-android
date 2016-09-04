@@ -17,8 +17,10 @@
     <Button
         android:id="@+id/button_download_packages"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/activity_toolbar_height"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_std_margin" />
+        android:layout_margin="@dimen/activity_std_margin"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite" />
 
 </RelativeLayout>

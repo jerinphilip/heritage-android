@@ -49,6 +49,14 @@
             android:screenOrientation="fullSensor">
         </activity>
 
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".AboutUsActivity"
+            android:screenOrientation="fullSensor">
+        </activity>
+
     </application>
 
 </manifest>

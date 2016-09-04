@@ -1,5 +1,6 @@
 package in.ac.iiit.cvit.heritage;
 
+import android.content.Intent;
 import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -7,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -66,6 +69,30 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent_settings = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent_settings);
+                break;
+            case R.id.action_about_us:
+                Intent intent_about_us = new Intent(MainActivity.this, AboutUsActivity.class);
+                startActivity(intent_about_us);
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public ArrayList<InterestPoint> LoadPackage(String packageName){

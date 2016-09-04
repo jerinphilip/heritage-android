@@ -1,14 +1,12 @@
 package in.ac.iiit.cvit.heritage;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -26,7 +24,14 @@ public class SplashIntroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         setContentView(R.layout.activity_splash_slider);
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_splash);
         splashIntroAdapter = new SplashIntroAdapter(getSupportFragmentManager());
@@ -96,7 +101,7 @@ public class SplashIntroActivity extends AppCompatActivity {
         for (int i=0; i<3; i++) {
             navigation_indicators[i] = new TextView(SplashIntroActivity.this);
             navigation_indicators[i].setText(Html.fromHtml("&#8226;"));
-            navigation_indicators[i].setTextSize(35);
+            navigation_indicators[i].setTextSize(36);
             navigation_indicators[i].setTextColor(getResources().getColor(R.color.colorGray));
             linearLayout.addView(navigation_indicators[i]);
         }

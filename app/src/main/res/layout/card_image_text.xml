@@ -19,7 +19,8 @@
             android:id="@+id/cardview_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_std_padding" />
+            android:layout_marginBottom="@dimen/activity_std_padding"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/cardview_text"
