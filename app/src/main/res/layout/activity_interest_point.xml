@@ -52,7 +52,15 @@
             android:paddingBottom="24dp">
 
             <include layout="@layout/card_text" />
-            <include layout="@layout/card_image" />
+            <include
+                android:id="@+id/card_images"
+                layout="@layout/card_details" />
+            <include
+                android:id="@+id/card_audio"
+                layout="@layout/card_details" />
+            <include
+                android:id="@+id/card_videos"
+                layout="@layout/card_details" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

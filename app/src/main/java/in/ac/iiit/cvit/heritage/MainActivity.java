@@ -1,8 +1,14 @@
 package in.ac.iiit.cvit.heritage;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
 
     public static ArrayList<InterestPoint> interestPoints;
+
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 2;
 
     private static final String LOGTAG = "Heritage";
 
@@ -63,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
            }
         });
+
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
 
     @Override
@@ -101,5 +112,38 @@ public class MainActivity extends AppCompatActivity {
         reader = new PackageReader(packageName);
         ArrayList<InterestPoint> interestPoints = reader.getContents();
         return interestPoints;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        openApplicationPermissions();
+                    } else {
+                        openApplicationPermissions();
+                    }
+                }
+            }
+        }
+    }
+
+    private void openApplicationPermissions() {
+        final Intent intent_permissions = new Intent();
+        intent_permissions.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent_permissions.addCategory(Intent.CATEGORY_DEFAULT);
+        intent_permissions.setData(Uri.parse("package:" + MainActivity.this.getPackageName()));
+
+        intent_permissions.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent_permissions.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent_permissions.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+
+        MainActivity.this.startActivity(intent_permissions);
     }
 }

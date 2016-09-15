@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,6 +20,12 @@ public class InterestPointActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView imageView;
     private TextView textview_info;
+    private CardView cardview_images;
+    private CardView cardview_videos;
+    private CardView cardview_audio;
+    private TextView textview_images;
+    private TextView textview_videos;
+    private TextView textview_audio;
     private ImageView imageview_images;
     private InterestPoint interestPoint;
     private SessionManager sessionManager;
@@ -56,9 +63,18 @@ public class InterestPointActivity extends AppCompatActivity {
         textview_info = (TextView) findViewById(R.id.cardview_text);
         textview_info.setText(interestPoint.get("info"));
 
-        imageview_images = (ImageView) findViewById(R.id.cardview_image);
-        imageview_images.setImageBitmap(interestPoint.getImages().get(0));
-        imageview_images.setOnClickListener(new View.OnClickListener() {
+        cardview_images = (CardView) findViewById(R.id.card_images);
+        textview_images = (TextView) cardview_images.findViewById(R.id.cardview_text);
+        cardview_videos = (CardView) findViewById(R.id.card_videos);
+        textview_videos = (TextView) cardview_videos.findViewById(R.id.cardview_text);
+        cardview_audio = (CardView) findViewById(R.id.card_audio);
+        textview_audio = (TextView) cardview_audio.findViewById(R.id.cardview_text);
+
+        textview_images.setText(R.string.images);
+        textview_videos.setText(R.string.videos);
+        textview_audio.setText(R.string.audio);
+
+        cardview_images.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent_image_slider = new Intent(InterestPointActivity.this, ImagePagerFragmentActivity.class);

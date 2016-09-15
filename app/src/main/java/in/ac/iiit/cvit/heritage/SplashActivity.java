@@ -32,7 +32,6 @@ public class SplashActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         launchPreferenceManager = new LaunchPreferenceManager(SplashActivity.this);
-        launchPreferenceManager.setFirstTimeLaunch(true);
 
         Thread background = new Thread() {
             @Override
@@ -46,6 +45,7 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(intent_packages_list);
                         finish();
                     } else {
+                        launchPreferenceManager.setFirstTimeLaunch(false);
                         Intent intent_splash_intro = new Intent(SplashActivity.this, SplashIntroActivity.class);
                         intent_splash_intro.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent_splash_intro);
